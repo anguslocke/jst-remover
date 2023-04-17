@@ -74,9 +74,37 @@ JST_PHD10 = [11.8, 5, 10.3, 2.6, 0.7, 1, 0.7];
 JST_PH3   = [7.8, 4.8, 6.7,   4, 1, 0.8, 0.3];
 // TODO: maybe can be parameterized to pin count
 
+// I measured those manually, but it ended up withing 0.1mm of nominal
+// To be verified:
+function JST_PHD(n) = let(_w = 2 * floor((n-10)/2))
+    [11.8 + _w, 5, 10.3 + _w, 2.6, 0.7, 1, 0.7];
+function JST_PH(n) = let(_w = 2 * (n - 3))
+    [7.8 + _w, 4.8, 6.7 + _w,   4, 1, 0.8, 0.3];
+
 module remover_v(v) {
     remover(v[0], v[1], v[2], v[3], v[4], v[5], v[6]);
 }
 
-remover_v(JST_PHD10);
+//remover_v(JST_PHD10);
 //translate([20, 0]) remover_v(JST_PH3);
+
+export() {
+    remover_v(JST_PH(2)); //#PH2
+    remover_v(JST_PH(3)); //#PH3
+    remover_v(JST_PH(4)); //#PH4
+    remover_v(JST_PH(5)); //#PH5
+    remover_v(JST_PH(6)); //#PH6
+    remover_v(JST_PH(7)); //#PH7
+    remover_v(JST_PH(8)); //#PH8
+    remover_v(JST_PH(9)); //#PH9
+    remover_v(JST_PH(10)); //#PH10
+    remover_v(JST_PHD(8)); //#PHD8
+    remover_v(JST_PHD(10)); //#PHD10
+    remover_v(JST_PHD(12)); //#PHD12
+    remover_v(JST_PHD(14)); //#PHD14
+    remover_v(JST_PHD(16)); //#PHD16
+    remover_v(JST_PHD(18)); //#PHD18
+    remover_v(JST_PHD(20)); //#PHD20
+    remover_v(JST_PHD(22)); //#PHD22
+    remover_v(JST_PHD(24)); //#PHD24
+}
