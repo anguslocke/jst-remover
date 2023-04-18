@@ -62,7 +62,7 @@ module remover(w, d, gw, gd, go, gh, gt, label="", wt=1.2, pad=0.2) {
                     translate(hkp[j]) circle(d=d + wt, $fn=24);
                 }
             }
-            translate(hkp[1] + [0,(d+wt)/2]) rotate([-90,0,atan(1/4)])
+            translate(hkp[1] + [0,-(d+wt)/2]) rotate([90,0,atan(1/4)]) translate([3,0])
                 lex(0.2, center=true) text(label, size=8, valign="center");
         }
     }
