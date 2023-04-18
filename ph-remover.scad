@@ -21,7 +21,7 @@ All dimensions measured roughly with calipers.
 It worked first try with PHD10 and PH4.
 */
 
-module remover(w, d, gw, gd, go, gh, gt, wt=1.2, pad=0.2) {
+module remover(w, d, gw, gd, go, gh, gt, label="", wt=1.2, pad=0.2) {
     cw = w + 2 * (wt + pad);  // total clip width
     cl = 12;                  // clip length, just the end bit
     module _c(grab=true) {
@@ -56,10 +56,14 @@ module remover(w, d, gw, gd, go, gh, gt, wt=1.2, pad=0.2) {
             [cl + 10, -(d + wt) / 2 + 10],
             [cl + 50, -(d + wt) / 2 + 20],
         ];
-        rotate([-90,0,90]) lex(cw, center=true) for (i = [0:len(hkp)-2]) {
-            hull() for (j = [i:i+1]) {
-                translate(hkp[j]) circle(d=d + wt, $fn=24);
+        rotate([-90,0,90]) difference() {
+            lex(cw, center=true) for (i = [0:len(hkp)-2]) {
+                hull() for (j = [i:i+1]) {
+                    translate(hkp[j]) circle(d=d + wt, $fn=24);
+                }
             }
+            translate(hkp[1] + [0,(d+wt)/2]) rotate([-90,0,atan(1/4)])
+                lex(0.2, center=true) text(label, size=8, valign="center");
         }
     }
     
@@ -70,19 +74,14 @@ module remover(w, d, gw, gd, go, gh, gt, wt=1.2, pad=0.2) {
 }
 
 //           w,    d,   gw,  gd,  go, gh, gt
-JST_PHD10 = [11.8, 5, 10.3, 2.6, 0.7, 1, 0.7];
-JST_PH3   = [7.8, 4.8, 6.7,   4, 1, 0.8, 0.3];
-// TODO: maybe can be parameterized to pin count
-
-// I measured those manually, but it ended up withing 0.1mm of nominal
 // To be verified:
 function JST_PHD(n) = let(_w = 2 * floor((n-10)/2))
-    [11.8 + _w, 5, 10.3 + _w, 2.6, 0.7, 1, 0.7];
+    [11.8 + _w, 5, 10.3 + _w, 2.6, 0.7, 1, 0.7, str("PHD", n)];
 function JST_PH(n) = let(_w = 2 * (n - 3))
-    [7.8 + _w, 4.8, 6.7 + _w,   4, 1, 0.8, 0.3];
+    [7.8 + _w, 4.8, 6.6 + _w,   4, 1, 0.8, 0.5, str("PH", n)];
 
 module remover_v(v) {
-    remover(v[0], v[1], v[2], v[3], v[4], v[5], v[6]);
+    remover(v[0], v[1], v[2], v[3], v[4], v[5], v[6], v[7]);
 }
 
 //remover_v(JST_PHD10);
