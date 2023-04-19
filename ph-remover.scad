@@ -67,14 +67,13 @@ module remover(w, d, gw, gd, go, gh, gt, label="", wt=1.2, pad=0.2) {
         }
     }
     
-    difference() {
+    rotate([90,0,0]) difference() {
         base();
         ztr(d + wt) rotate([-90,0,0]) scale([gw,2*d,1]) cylinder(d=1, h=100, $fn=32);
     }
 }
 
 //           w,    d,   gw,  gd,  go, gh, gt
-// To be verified:
 function JST_PHD(n) = let(_w = 2 * floor((n-10)/2))
     [11.8 + _w, 5, 10.3 + _w, 2.6, 0.7, 1, 0.7, str("PHD", n)];
 function JST_PH(n) = let(_w = 2 * (n - 3))
@@ -106,4 +105,19 @@ export() {
     remover_v(JST_PHD(20)); //#PHD20
     remover_v(JST_PHD(22)); //#PHD22
     remover_v(JST_PHD(24)); //#PHD24
+}
+
+// a whole bunch
+*union() {
+    ph = [2, 3, 4, 6, 8];
+    phd = [8, 10, 12, 16, 18, 20, 22, 32];
+    for (i = [0:len(ph)-1]) {
+        translate([12*pow(i, 1.3), 0]) remover_v(JST_PH(ph[i]));
+    }
+    for (i = [0:4]) {
+        translate([16*pow(i, 1.3), 20]) remover_v(JST_PHD(phd[i]));
+    }
+    for (i = [5:len(phd)-1]) {
+        translate([28*pow(i-5, 1.3), 40]) remover_v(JST_PHD(phd[i]));
+    }
 }
